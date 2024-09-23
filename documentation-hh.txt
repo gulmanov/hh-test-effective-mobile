@@ -1,0 +1,231 @@
+API Documentation
+
+Note: Используйте заголовок Content-Type: application/x-www-form-urlencoded для отправки данных в POST и PUT запросах.
+
+**Задание 1**
+
+1. Create Product Endpoint
+   - Endpoint: POST  'http://159.100.9.102:3001/products'
+   - Description: Этот endpoint создает новый продукт в базе данных.
+   - Request Body (x-www-form-urlencoded):
+     - plu: Строка, уникальный идентификатор продукта.
+     - name: Строка, название продукта.
+   - Response: Данные о созданном продукте.
+   - Example Request:
+     POST /products HTTP/1.1
+     Host: 
+     Content-Type: application/x-www-form-urlencoded
+     plu=example_plu&name=Example Product
+   - Example Response:
+     {
+       "id": 1,
+       "plu": "example_plu",
+       "name": "Example Product"
+     }
+
+2. Populate Products Endpoint
+   - Endpoint: GET 'http://159.100.9.102:3001/populate-products'
+   - Description: Этот конечный пункт генерирует 100 случайных продуктов и добавляет их в базу данных.
+   - Response: Сообщение о завершении добавления продуктов и данные о добавленных продуктах.
+   - Example Request:
+     GET /populate-products HTTP/1.1
+     Host: 
+   - Example Response:
+     {
+       "message": "100 random products added",
+       "products": [
+         { "id": 1, "plu": "eu9428", "name": "Incredible Soft Gloves" },
+         ...
+       ]
+     }
+
+3. Create Stock Endpoint
+   - Endpoint: POST 'http://159.100.9.102:3001/stocks'
+   - Description: Этот endpoint создает новый запас для указанного продукта.
+   - Request Body (x-www-form-urlencoded):
+     - product_id: Идентификатор продукта, к которому относится запас.
+     - stock_on_shelf: Количество запасов на полке.
+     - stock_in_order: Количество запасов в заказе.
+     - shop_id: Идентификатор магазина.
+   - Response: Данные о созданном запасе.
+   - Example Request:
+     POST /stocks HTTP/1.1
+     Content-Type: application/x-www-form-urlencoded
+     product_id=1&stock_on_shelf=100&stock_in_order=50&shop_id=1
+   - Example Response:
+     {
+       "id": 1,
+       "product_id": 1,
+       "stock_on_shelf": 100,
+       "stock_in_order": 50,
+       "shop_id": 1
+     }
+
+4. Increase Stock Endpoint
+   - Endpoint: PUT 'http://159.100.9.102:3001/stocks/increase'
+   - Description: Этот endpoint увеличивает количество запасов для указанного идентификатора запаса.
+   - Request Body (x-www-form-urlencoded):
+     - stock_id: Идентификатор запаса.
+     - amount: Сколько увеличить.
+   - Response: Данные об обновленном запасе.
+   - Example Request:
+     PUT /stocks/increase HTTP/1.1
+     Content-Type: application/x-www-form-urlencoded
+     stock_id=1&amount=20
+   - Example Response:
+     {
+       "id": 1,
+       "product_id": 1,
+       "stock_on_shelf": 120,
+       "stock_in_order": 50,
+       "shop_id": 1
+     }
+
+5. Decrease Stock Endpoint
+   - Endpoint: PUT 'http://159.100.9.102:3001/stocks/decrease'
+   - Description: Этот конечный пункт уменьшает количество запасов для указанного идентификатора запаса.
+   - Request Body (x-www-form-urlencoded):
+     - stock_id: Идентификатор запаса.
+     - amount: Сколько уменьшить.
+   - Response: Данные об обновленном запасе.
+   - Example Request:
+     PUT /stocks/decrease HTTP/1.1
+     Content-Type: application/x-www-form-urlencoded
+     stock_id=1&amount=10
+   - Example Response:
+     {
+       "id": 1,
+       "product_id": 1,
+       "stock_on_shelf": 110,
+       "stock_in_order": 50,
+       "shop_id": 1
+     }
+
+6. Get Stocks Endpoint
+   - Endpoint: GET 'http://159.100.9.102:3001/stocks'
+   - Description: Этот endpoint получает запасы с возможностью фильтрации по различным параметрам.
+   - Query Parameters:
+     - plu: (опционально) Уникальный идентификатор продукта.
+     - shop_id: (опционально) Идентификатор магазина.
+     - stock_on_shelf_min: (опционально) Минимальное количество запасов на полке.
+     - stock_on_shelf_max: (опционально) Максимальное количество запасов на полке.
+     - stock_in_order_min: (опционально) Минимальное количество запасов в заказе.
+     - stock_in_order_max: (опционально) Максимальное количество запасов в заказе.
+   - Response: Данные о запасах, соответствующие фильтрам.
+   - Example Request:
+     GET /stocks?plu=example_plu&shop_id=1 HTTP/1.1
+   - Example Response:
+     [
+       {
+         "id": 1,
+         "product_id": 1,
+         "stock_on_shelf": 110,
+         "stock_in_order": 50,
+         "shop_id": 1
+       }
+     ]
+
+7. Get Products Endpoint
+   - Endpoint: GET 'http://159.100.9.102:3001/products'
+   - Description: Этот конечный пункт получает продукты с возможностью фильтрации по различным параметрам.
+   - Query Parameters:
+     - name: (опционально) Название продукта.
+     - plu: (опционально) Уникальный идентификатор продукта.
+   - Response: Данные о продуктах, соответствующие фильтрам.
+   - Example Request:
+     GET /products?name=example HTTP/1.1
+   - Example Response:
+     [
+       {
+         "id": 1,
+         "plu": "example_plu",
+         "name": "Example Product"
+       }
+     ]
+
+
+
+
+
+
+
+1. Action Logging Service
+   - Endpoint: GET 'http://159.100.9.102:3002/'
+   - Description: Этот endpoint предоставляет информацию о сервисе ведения журналов действий.
+   - Response: Сообщение о работе сервиса.
+   - Example Request:
+     GET / HTTP/1.1
+     Host: your-domain.com
+   - Example Response:
+     Action Logging Service
+
+2. Create Log Entry Endpoint
+   - Endpoint: POST 'http://159.100.9.102:3002/log'
+   - Description: Этот end point создает новую запись в журнале действий.
+   - Request Body:
+     - shop_id: Идентификатор магазина.
+     - plu: Уникальный идентификатор продукта.
+     - action: Описание действия.
+   - Response: Сообщение об успешном ведении журнала.
+   - Example Request:
+     {
+       "shop_id": 1,
+       "plu": "example_plu",
+       "action": "Stock created"
+     }
+   - Example Response:
+     Action logged successfully
+
+3. Retrieve Logs with Filters Endpoint
+   - Endpoint: GET 'http://159.100.9.102:3002/logs'
+   - Description: Этот endpoint получает записи журнала с возможностью фильтрации по различным параметрам.
+   - Query Parameters:
+     - shop_id: (опционально) Идентификатор магазина.
+     - plu: (опционально) Уникальный идентификатор продукта.
+     - action: (опционально) Описание действия.
+     - date_start: (опционально) Начальная дата для фильтрации.
+     - date_end: (опционально) Конечная дата для фильтрации.
+   - Response: Данные о записях журнала, соответствующие фильтрам.
+   - Example Request:
+     GET /logs?shop_id=1&action=Stock%20created HTTP/1.1
+   - Example Response:
+     [
+       {
+         "shop_id": 1,
+         "plu": "example_plu",
+         "action": "Stock created",
+         "date": "2024-09-22T12:34:56Z"
+       }
+     ]
+
+
+
+
+
+
+
+
+**Задание 2**
+
+1. Seed Users Endpoint
+   - Endpoint: GET 'http://159.100.9.102:3000/users/seed'
+   - Description: Этот endpoint заполняет базу данных тестовыми данными пользователей. В настоящее время он заполнит 1000 случайных записей пользователей. База данных содержит более миллиона случайно сгенерированных записей пользователей с помощью этого конечного пункта.
+   - Response: Сообщение о завершении заполнения пользователей.
+   - Example Request:
+     GET /users/seed HTTP/1.1
+   - Example Response:
+     {
+       "message": "User seeding completed"
+     }
+
+2. Reset Problems Endpoint
+   - Endpoint: GET 'http://159.100.9.102:3000/users/reset-problems'
+   - Description: Этот конечный пункт сбрасывает флаг "проблемы" для всех пользователей и возвращает количество пользователей, у которых этот флаг был установлен в true.
+   - Response: Число, представляющее количество пользователей с флагом "проблемы", установленным в true до сброса.
+   - Example Request:
+     GET /users/reset-problems HTTP/1.1
+   - Example Response:
+     {
+       "count": 42
+     }
+
